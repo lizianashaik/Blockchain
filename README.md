@@ -26,7 +26,7 @@ Clone this repository or download the files:
 
 ## 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone <https://github.com/lizianashaik/Blockchain>
 cd blockchain_sim
 ```
 
