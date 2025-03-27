@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Blockchain</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Blockchain Simulation</h1>
+    
+    <div>
+        <h2>Add Transaction</h2>
+        <input type="text" id="transaction" placeholder="e.g., Alice sends 10 BTC to Bob">
+        <button onclick="addTransaction()">Add</button>
+    </div>
+    
+    <div>
+        <h2>Mine Block</h2>
+        <button onclick="mineBlock()">Mine</button>
+    </div>
+    
+    <div>
+        <h2>Blockchain</h2>
+        <button onclick="refreshChain()">Refresh</button>
+        <button onclick="validateChain()">Validate</button>
+        <pre id="chain-output"></pre>
+    </div>
+
+    <script>
+        function addTransaction() {
+            const transaction = $('#transaction').val();
+            $.ajax({
+                url: '/add_transaction',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({transaction: transaction}),
+                success: function(response) { alert(response.message); },
+                error: function(xhr) { alert(xhr.responseJSON.error); }
+            });
+        }
+
+        function mineBlock() {
+            $.ajax({
+                url: '/mine',
+                type: 'POST',
+                success: function(response) { alert(response.message); refreshChain(); },
+                error: function(xhr) { alert(xhr.responseJSON.error); }
+            });
+        }
+
+        function refreshChain() {
+            $.get('/chain', function(data) {
+                $('#chain-output').text(JSON.stringify(data, null, 2));
+            });
+        }
+
+        function validateChain() {
+            $.get('/validate', function(data) {
+                alert("Chain valid: " + data.valid);
+            });
+        }
+    </script>
+</body>
+</html>
